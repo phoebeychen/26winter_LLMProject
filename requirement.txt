@@ -1,7 +1,9 @@
 streamlit
 numpy
+pandas
+openai
+gdown
 sentence-transformers
 matplotlib
-gdown
-openai
-pandas
+altair
+scipy
