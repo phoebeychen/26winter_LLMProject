@@ -20,7 +20,11 @@ import numpy as np
 import numpy.linalg as la
 import pickle
 import os
-import gdown
+try:
+    import gdown
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "gdown"])
+    import gdown
 from sentence_transformers import SentenceTransformer
 import matplotlib.pyplot as plt
 import math
