@@ -19,6 +19,8 @@ import streamlit as st
 import numpy as np
 import numpy.linalg as la
 import pickle
+import subprocess
+import sys
 import os
 try:
     import gdown
