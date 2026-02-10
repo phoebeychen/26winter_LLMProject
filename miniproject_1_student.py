@@ -22,11 +22,7 @@ import pickle
 import subprocess
 import sys
 import os
-try:
-    import gdown
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "gdown"])
-    import gdown
+import gdown
 from sentence_transformers import SentenceTransformer
 import matplotlib.pyplot as plt
 import math
