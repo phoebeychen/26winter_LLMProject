@@ -71,18 +71,41 @@ def download_glove_embeddings_gdrive(model_type):
 
 
 # @st.cache_data()
+
+
 def load_glove_embeddings_gdrive(model_type):
+
     word_index_temp = "word_index_dict_" + str(model_type) + "_temp.pkl"
     embeddings_temp = "embeddings_" + str(model_type) + "_temp.npy"
 
-    # Load word index dictionary
-    word_index_dict = pickle.load(open(word_index_temp, "rb"), encoding="latin")
+    if not os.path.exists(word_index_temp) or not os.path.exists(embeddings_temp):
+        st.info(f"Downloading GloVe {model_type} embeddings from Google Drive... This may take a moment.")
+        
+        word_index_id, embeddings_id = get_model_id_gdrive(model_type)
 
-    # Load embeddings numpy
-    embeddings = np.load(embeddings_temp)
+        try:
+            if not os.path.exists(word_index_temp):
+                gdown.download(id=word_index_id, output=word_index_temp, quiet=False)
+            
+            if not os.path.exists(embeddings_temp):
+                gdown.download(id=embeddings_id, output=embeddings_temp, quiet=False)
+        except Exception as e:
+            st.error(f"Error downloading files: {e}")
+            return None, None
 
-    return word_index_dict, embeddings
+    if not os.path.exists(word_index_temp) or not os.path.exists(embeddings_temp):
+        st.error("Embedding files not found after download attempt.")
+        return None, None
 
+    try:
+        with open(word_index_temp, "rb") as f:
+            word_index_dict = pickle.load(f, encoding="latin")
+        
+        embeddings = np.load(embeddings_temp)
+        return word_index_dict, embeddings
+    except Exception as e:
+        st.error(f"Error loading files: {e}")
+        return None, None
 
 @st.cache_resource()
 def load_sentence_transformer_model(model_name):
