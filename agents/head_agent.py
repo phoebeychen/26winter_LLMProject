@@ -122,18 +122,27 @@ class Head_Agent:
                     latest_query=user_query
                 )
             
-            # ===== 步骤 2: 检查是否无礼/冒犯 =====
-            # 基于完整语义进行判断
+            # ===== 步骤 2: 检查是否无礼/冒犯，或小聊天 =====
+            # 返回 "obnoxious" / "small_talk" / "normal"
             agent_path.append("Obnoxious_Agent")
-            is_obnoxious = self.obnoxious_agent.check_query(processed_query)
-            
-            if is_obnoxious:
+            query_class = self.obnoxious_agent.check_query(processed_query)
+
+            if query_class == "obnoxious":
                 response = "I'm sorry, but I can't respond to that type of query. Please ask respectfully."
                 agent_path.append("REJECTED_OBNOXIOUS")
                 return {
                     "response": response,
                     "agent_path": " → ".join(agent_path),
                     "status": "rejected_obnoxious"
+                }
+
+            if query_class == "small_talk":
+                response = "Hello! Great to hear from you! I'm doing well and ready to help. Whenever you have questions about Machine Learning — algorithms, models, or anything from the textbook — feel free to ask!"
+                agent_path.append("SMALL_TALK")
+                return {
+                    "response": response,
+                    "agent_path": " → ".join(agent_path),
+                    "status": "success"
                 }
             
             # ===== 步骤 3: 从Pinecone检索相关文档 =====
@@ -202,7 +211,7 @@ class Head_Agent:
         用于开始新的对话或清除上下文
         """
         self.conversation_history = []
-        print("💬 对话历史已重置")
+        print("Conversation history reset.")
     
     def get_conversation_history(self):
         """

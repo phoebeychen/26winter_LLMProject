@@ -11,16 +11,15 @@ class Relevant_Documents_Agent:
         self.prompt = (
             "You are a relevance evaluation assistant for a Machine Learning textbook chatbot.\n\n"
             "You will be given a user's query and a set of retrieved document chunks. "
-            "Your task is to determine whether the retrieved documents are relevant to "
-            "answering the user's query.\n\n"
-            "Documents are considered RELEVANT if they contain information that can "
-            "help answer the user's question about Machine Learning topics covered in the textbook.\n\n"
-            "Documents are considered NOT RELEVANT if:\n"
-            "- The user's question is completely unrelated to Machine Learning\n"
-            "- The retrieved documents do not contain information related to the user's question\n"
-            "- The documents are about a different topic than what the user asked\n\n"
-            "Respond with EXACTLY one word: 'Yes' if the documents are relevant, "
-            "or 'No' if they are not."
+            "Your task is to determine whether the user's query is about Machine Learning "
+            "or data science topics that could be addressed by a Machine Learning textbook.\n\n"
+            "Respond 'Yes' if the user's query is about any Machine Learning or data science topic "
+            "(e.g., algorithms, models, training, evaluation, statistics, neural networks, etc.), "
+            "even if the retrieved documents do not perfectly match the specific question.\n\n"
+            "Respond 'No' ONLY if the user's query is completely unrelated to Machine Learning "
+            "(e.g., cooking, sports, entertainment, general trivia).\n\n"
+            "Respond with EXACTLY one word: 'Yes' if the query is ML-related, "
+            "or 'No' if it is completely off-topic."
         )
 
     def get_relevance(self, query, docs) -> bool:

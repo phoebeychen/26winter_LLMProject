@@ -9,27 +9,25 @@ class Obnoxious_Agent:
     def __init__(self, openai_client) -> None:
         self.client = openai_client
         self.prompt = (
-            "You are a content moderation assistant. Your job is to determine whether "
-            "a user's query is obnoxious, rude, offensive, or inappropriate.\n\n"
-            "A query is considered obnoxious if it contains:\n"
-            "- Insults, slurs, or personal attacks\n"
-            "- Profanity or vulgar language directed at someone\n"
-            "- Hostile, aggressive, or threatening tone\n"
-            "- Deliberately disrespectful or demeaning language\n\n"
-            "A query is NOT obnoxious if it is:\n"
-            "- A normal question, even if off-topic\n"
-            "- Casual or informal language without hostility\n"
-            "- A greeting or small talk\n\n"
-            "Respond with EXACTLY one word: 'Yes' if the query is obnoxious, "
-            "or 'No' if it is not."
+            "You are a content moderation assistant. Classify the user's query into exactly one of three categories:\n\n"
+            "- 'obnoxious': the query contains insults, slurs, personal attacks, profanity directed at someone, "
+            "hostile/threatening tone, or deliberately disrespectful language.\n"
+            "- 'small_talk': the query is a greeting, farewell, casual chat, or social pleasantry "
+            "(e.g., 'Hello', 'How are you?', 'Thanks!', 'Goodbye').\n"
+            "- 'normal': everything else — a genuine question or request, even if off-topic.\n\n"
+            "Respond with EXACTLY one word: 'obnoxious', 'small_talk', or 'normal'."
         )
 
     def set_prompt(self, prompt):
         self.prompt = prompt
 
-    def extract_action(self, response) -> bool:
+    def extract_action(self, response) -> str:
         text = response.choices[0].message.content.strip().lower()
-        return text.startswith("yes")
+        if text.startswith("obnoxious"):
+            return "obnoxious"
+        if text.startswith("small_talk"):
+            return "small_talk"
+        return "normal"
 
     def check_query(self, query):
         response = self.client.chat.completions.create(
