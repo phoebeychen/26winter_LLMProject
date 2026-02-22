@@ -23,9 +23,20 @@ class Context_Rewriter_Agent:
     def rephrase(self, user_history, latest_query):
         if not user_history or not user_history.strip():
             return latest_query
+        
+        # 将列表格式转换为字符串，与head_agent接口保持一致
+        if isinstance(user_history, list):
+            history_str = "\n".join([
+                f"{msg['role']}: {msg['content']}" 
+                for msg in user_history
+            ])
+        else:
+            history_str = str(user_history)
+        
+
 
         user_message = (
-            f"Conversation history:\n{user_history}\n\n"
+            f"Conversation history:\n{history_str}\n\n"
             f"Latest user query:\n{latest_query}\n\n"
             f"Rewritten self-contained query:"
         )

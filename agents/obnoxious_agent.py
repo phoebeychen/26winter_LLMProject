@@ -6,8 +6,8 @@ from openai import OpenAI
 
 
 class Obnoxious_Agent:
-    def __init__(self, client) -> None:
-        self.client = client
+    def __init__(self, openai_client) -> None:
+        self.client = openai_client
         self.prompt = (
             "You are a content moderation assistant. Your job is to determine whether "
             "a user's query is obnoxious, rude, offensive, or inappropriate.\n\n"
