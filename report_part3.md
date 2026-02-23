@@ -4,7 +4,7 @@
 
 We built a multi-agent chatbot that answers questions from a Machine Learning textbook indexed in Pinecone. Each responsibility is handled by a dedicated agent orchestrated by a central Head_Agent. The pipeline is shown below — two implementation details not captured in the diagram: the Context_Rewriter_Agent only activates when conversation history exists, and the Obnoxious_Agent uses three-way classification (`obnoxious` / `small_talk` / `normal`) rather than a binary check.
 
-![Agent Pipeline Diagram](Diagram.png)
+![Agent Pipeline Diagram](Diagram.svg)
 
 ## Creative Design Choices
 
